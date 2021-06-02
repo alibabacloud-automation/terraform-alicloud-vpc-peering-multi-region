@@ -132,6 +132,12 @@ variable "child_instance_region_id_2" {
   default     = ""
 }
 
+variable "child_instance_type" {
+  description = "The type of the child instance to attach."
+  type        = string
+  default     = "VPC"
+}
+
 #bandwidth limit
 variable "create_bandwidth_limit" {
   description = "Wether to create bandwidth limit,Default to true."
