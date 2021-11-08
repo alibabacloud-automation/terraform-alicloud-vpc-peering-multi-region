@@ -144,3 +144,9 @@ variable "bandwidth_limit" {
   type        = number
   default     = 4
 }
+
+variable "child_instance_type" {
+  description = "The type of the associated network."
+  type        = string
+  default     = "VPC"
+}
