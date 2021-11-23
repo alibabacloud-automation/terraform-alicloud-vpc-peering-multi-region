@@ -1,11 +1,3 @@
-provider "alicloud" {
-  profile                 = var.profile != "" ? var.profile : null
-  shared_credentials_file = var.shared_credentials_file != "" ? var.shared_credentials_file : null
-  region                  = var.region != "" ? var.region : null
-  skip_region_validation  = var.skip_region_validation
-  configuration_source    = "terraform-alicloud-modules/vpc-peering-multi-region"
-}
-
 locals {
   cen_id = var.using_existing_cen_id != false || var.existing_cen_id != "" ? var.existing_cen_id : concat(alicloud_cen_instance.this.*.id, [""])[0]
 }

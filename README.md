@@ -14,18 +14,11 @@ These types of resources are supported:
 * [alicloud_cen_bandwidth_package](https://www.terraform.io/docs/providers/alicloud/r/cen_bandwidth_package.html)
 * [alicloud_cen_bandwidth_package_attachment](https://www.terraform.io/docs/providers/alicloud/r/cen_bandwidth_package_attachment.html)
 
-
-## Terraform versions
-
-This module requires Terraform 0.12 and Terraform Provider AliCloud 1.57.0+.
-
 ## Usage
 
 ```hcl
 module "vpc-peering-multi-region" {
   source  = "terraform-alicloud-modules/vpc-peering-multi-region/alicloud"
-  region   = "cn-shanghai"                
-  profile  = "Your-Profile-Name"
 
   #cen
   cen_name        = "your_cen_name"
@@ -49,9 +42,76 @@ module "vpc-peering-multi-region" {
 * [complete](https://github.com/terraform-alicloud-modules/terraform-alicloud-vpc-peering-multi-region/tree/master/examples/complete)
 
 ## Notes
+From the version v1.1.0, the module has removed the following `provider` setting:
 
-* This module using AccessKey and SecretKey are from `profile` and `shared_credentials_file`.
-If you have not set them yet, please install [aliyun-cli](https://github.com/aliyun/aliyun-cli#installation) and configure it.
+```hcl
+provider "alicloud" {
+  profile                 = var.profile != "" ? var.profile : null
+  shared_credentials_file = var.shared_credentials_file != "" ? var.shared_credentials_file : null
+  region                  = var.region != "" ? var.region : null
+  skip_region_validation  = var.skip_region_validation
+  configuration_source    = "terraform-alicloud-modules/vpc-peering-multi-region"
+}
+```
+
+If you still want to use the `provider` setting to apply this module, you can specify a supported version, like 1.0.0:
+
+```hcl
+module "vpc-peering-multi-region" {
+  source          = "terraform-alicloud-modules/vpc-peering-multi-region/alicloud"
+  version         = "1.0.0"
+  region          = "cn-shanghai"
+  profile         = "Your-Profile-Name"
+  cen_name        = "your_cen_name"
+  cen_description = "terraform cen"
+  // ...
+}
+```
+
+If you want to upgrade the module to 1.1.0 or higher in-place, you can define a provider which same region with
+previous region:
+
+```hcl
+provider "alicloud" {
+  region  = "cn-shanghai"
+  profile = "Your-Profile-Name"
+}
+module "vpc-peering-multi-region" {
+  source          = "terraform-alicloud-modules/vpc-peering-multi-region/alicloud"
+  cen_name        = "your_cen_name"
+  cen_description = "terraform cen"
+  // ...
+}
+```
+or specify an alias provider with a defined region to the module using `providers`:
+
+```hcl
+provider "alicloud" {
+  region  = "cn-shanghai"
+  profile = "Your-Profile-Name"
+  alias   = "sh"
+}
+module "vpc-peering-multi-region" {
+  source          = "terraform-alicloud-modules/vpc-peering-multi-region/alicloud"
+  providers       = {
+    alicloud = alicloud.sh
+  }
+  cen_name        = "your_cen_name"
+  cen_description = "terraform cen"
+  // ...
+}
+```
+
+and then run `terraform init` and `terraform apply` to make the defined provider effect to the existing module state.
+
+More details see [How to use provider in the module](https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly)
+
+## Terraform versions
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12.0 |
+| <a name="requirement_alicloud"></a> [alicloud](#requirement\_alicloud) | >= 1.57.0 |
 
 Submit Issues
 -------------
@@ -61,7 +121,7 @@ If you have any problems when using this module, please opening a [provider issu
 
 Authors
 -------
-Created and maintained by He Guimin(@xiaozhu36, heguimin36@163.com) and Yi Jincheng(yi785301535@163.com) 
+Created and maintained by Alibaba Cloud Terraform Team(terraform@alibabacloud.com)
 
 License
 ----
