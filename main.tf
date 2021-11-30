@@ -27,6 +27,7 @@ resource "alicloud_cen_instance_attachment" "vpc_attach_1" {
   instance_id              = local.cen_id
   child_instance_id        = var.vpc_id_1
   child_instance_region_id = var.child_instance_region_id_1
+  child_instance_type      = "VPC"
 }
 
 resource "alicloud_cen_instance_attachment" "vpc_attach_2" {
@@ -34,6 +35,7 @@ resource "alicloud_cen_instance_attachment" "vpc_attach_2" {
   instance_id              = local.cen_id
   child_instance_id        = var.vpc_id_2
   child_instance_region_id = var.child_instance_region_id_2
+  child_instance_type      = "VPC"
 }
 
 resource "alicloud_cen_bandwidth_limit" "this" {

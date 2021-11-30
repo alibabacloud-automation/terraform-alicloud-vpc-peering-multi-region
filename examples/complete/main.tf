@@ -4,39 +4,37 @@ variable "profile" {
 variable "region" {
   default = "cn-shanghai"
 }
-
-provider "alicloud" {
-  region  = var.region
-  profile = var.profile
-}
-
 variable "child_instance_region_id_1" {
-  default = "cn-hangzhou"
+  default = "cn-beijing"
 }
 
 variable "child_instance_region_id_2" {
   default = "cn-shanghai"
 }
-
 provider "alicloud" {
-  alias  = "fra"
-  region = var.child_instance_region_id_1
+  region  = var.region
+  profile = var.profile
 }
-
+provider "alicloud" {
+  alias  = "bj"
+  region = var.child_instance_region_id_1
+  profile = var.profile
+}
 provider "alicloud" {
   alias  = "sh"
   region = var.child_instance_region_id_2
+  profile = var.profile
 }
 
 resource "alicloud_vpc" "vpc1" {
-  provider   = "alicloud.fra"
-  name       = "vpc1"
+  provider   = "alicloud.bj"
+  vpc_name       = "vpc1"
   cidr_block = "192.168.0.0/16"
 }
 
 resource "alicloud_vpc" "vpc2" {
   provider   = "alicloud.sh"
-  name       = "vpc2"
+  vpc_name       = "vpc2"
   cidr_block = "172.16.0.0/12"
 }
 module "vpc-peering-multi-region" {
