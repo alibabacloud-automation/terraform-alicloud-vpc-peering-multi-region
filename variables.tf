@@ -9,6 +9,7 @@ variable "profile" {
   type        = string
   default     = ""
 }
+
 variable "shared_credentials_file" {
   description = "(Deprecated from version 1.1.0) This is the path to the shared credentials file. If this is not set and a profile is specified, $HOME/.aliyun/config.json will be used."
   type        = string
@@ -19,6 +20,18 @@ variable "skip_region_validation" {
   description = "(Deprecated from version 1.1.0) Skip staticvalidation of region ID. Used by users of alternative AlibabaCloud-like APIs or users w/ access to regions that are not public (yet)."
   type        = bool
   default     = false
+}
+
+variable "geographic_region_ids" {
+  description = "(Deprecated from version 1.2.0) List of the two areas to connect. Valid value: China | North-America | Asia-Pacific | Europe | Middle-East."
+  type        = set(string)
+  default     = []
+}
+
+variable "charge_type" {
+  description = "(Deprecated from version 1.2.0) The billing method. Valid value: PostPaid | PrePaid. Default to PostPaid. If set to PrePaid, the bandwidth package can't be deleted before expired time."
+  type        = string
+  default     = "PostPaid"
 }
 
 #cen
@@ -52,18 +65,6 @@ variable "cen_description" {
   default     = ""
 }
 
-variable "vpc_id_1" {
-  description = "The vpc id."
-  type        = string
-  default     = ""
-}
-
-variable "vpc_id_2" {
-  description = "The vpc id."
-  type        = string
-  default     = ""
-}
-
 #bandwidth  package
 variable "create_bandwidth_package" {
   description = "Whether to create bandwidth package."
@@ -74,28 +75,34 @@ variable "create_bandwidth_package" {
 variable "bandwidth_package_name" {
   description = "The name of the bandwidth package. Defaults to null."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "bandwidth" {
   description = "The bandwidth in Mbps of the bandwidth package. Cannot be less than 2Mbps."
   type        = number
-  default     = 10
+  default     = 20
 }
 
-variable "geographic_region_ids" {
-  description = "List of the two areas to connect. Valid value: China | North-America | Asia-Pacific | Europe | Middle-East."
-  type        = set(string)
-  default     = []
+variable "geographic_region_a_id" {
+  description = "The area A to which the network instance belongs."
+  type        = string
+  default     = "China"
+}
+
+variable "geographic_region_b_id" {
+  description = "The area B to which the network instance belongs."
+  type        = string
+  default     = "China"
 }
 
 variable "banwidth_description" {
   description = "The description of the bandwidth package. Default to null."
   type        = string
-  default     = "null"
+  default     = ""
 }
 
-variable "charge_type" {
+variable "payment_type" {
   description = "The billing method. Valid value: PostPaid | PrePaid. Default to PostPaid. If set to PrePaid, the bandwidth package can't be deleted before expired time."
   type        = string
   default     = "PostPaid"
@@ -107,17 +114,36 @@ variable "period" {
   default     = 1
 }
 
-#attachment
+#bandwidth  package attachment
 variable "create_bandwidth_package_attachment" {
   description = "Wether to create bandwidth package attachment,Default to true."
   type        = bool
   default     = true
 }
 
+variable "bandwidth_package_id" {
+  description = "The ID of the CEN bandwidth package."
+  type        = string
+  default     = ""
+}
+
+#cen instance attachment
 variable "create_cen_instance_attachment" {
   description = "Wether to create bandwidth package attachment,Default to true."
   type        = bool
   default     = true
+}
+
+variable "vpc_id_1" {
+  description = "The vpc id."
+  type        = string
+  default     = ""
+}
+
+variable "vpc_id_2" {
+  description = "The vpc id."
+  type        = string
+  default     = ""
 }
 
 variable "child_instance_region_id_1" {
@@ -137,6 +163,12 @@ variable "create_bandwidth_limit" {
   description = "Wether to create bandwidth limit,Default to true."
   type        = bool
   default     = true
+}
+
+variable "instance_id" {
+  description = "The ID of the CEN instance."
+  type        = string
+  default     = ""
 }
 
 variable "bandwidth_limit" {
