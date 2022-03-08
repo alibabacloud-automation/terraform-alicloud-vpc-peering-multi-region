@@ -6,6 +6,3 @@ cen_description = "update_cen_description"
 bandwidth_package_name = "update-tf-bandwidth-package-name"
 banwidth_description   = "update_banwidth_description"
 period                 = 2
-
-#bandwidth limit
-bandwidth_limit = 5

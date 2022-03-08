@@ -48,8 +48,4 @@ resource "alicloud_cen_bandwidth_limit" "this" {
     var.child_instance_region_id_1,
   var.child_instance_region_id_2]
   bandwidth_limit = var.bandwidth_limit
-  depends_on = [
-    "alicloud_cen_bandwidth_package_attachment.this",
-    "alicloud_cen_instance_attachment.vpc_attach_1",
-  "alicloud_cen_instance_attachment.vpc_attach_2"]
 }
