@@ -4,8 +4,8 @@ provider "alicloud" {
 }
 
 provider "alicloud" {
-  alias  = "sz"
-  region = "cn-shenzhen"
+  alias  = "hz"
+  region = "cn-hangzhou"
 }
 
 resource "alicloud_vpc" "vpc1" {
@@ -14,7 +14,7 @@ resource "alicloud_vpc" "vpc1" {
 }
 
 resource "alicloud_vpc" "vpc2" {
-  provider   = alicloud.sz
+  provider   = alicloud.hz
   cidr_block = "172.16.0.0/16"
 }
 
@@ -113,7 +113,7 @@ module "cen_instance_attachment" {
   vpc_id_1                   = alicloud_vpc.vpc1.id
   child_instance_region_id_1 = "cn-beijing"
   vpc_id_2                   = alicloud_vpc.vpc2.id
-  child_instance_region_id_2 = "cn-shenzhen"
+  child_instance_region_id_2 = "cn-hangzhou"
 
   #bandwidth limit
   create_bandwidth_limit = false
