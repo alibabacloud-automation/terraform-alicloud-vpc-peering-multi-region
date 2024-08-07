@@ -6,7 +6,7 @@ output "this_cen_id" {
 
 output "this_cen_name" {
   description = "The name of the CEN instance."
-  value       = concat(alicloud_cen_instance.this.*.name, [""])[0]
+  value       = concat(alicloud_cen_instance.this.*.cen_instance_name, [""])[0]
 }
 
 output "this_cen_description" {
