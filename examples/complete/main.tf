@@ -1,23 +1,32 @@
 provider "alicloud" {
-  alias  = "bj"
-  region = "cn-beijing"
+  alias  = "region_a"
+  region = "cn-shanghai"
 }
 
 provider "alicloud" {
-  alias  = "hz"
-  region = "cn-hangzhou"
+  alias  = "region_b"
+  region = "cn-zhangjiakou"
 }
 
 resource "alicloud_vpc" "vpc1" {
-  provider   = alicloud.bj
+  provider   = alicloud.region_a
   cidr_block = "172.16.0.0/12"
 }
 
 resource "alicloud_vpc" "vpc2" {
-  provider   = alicloud.hz
+  provider   = alicloud.region_b
   cidr_block = "172.16.0.0/16"
 }
 
+data "alicloud_regions" "region_a" {
+  current  = true
+  provider = alicloud.region_a
+}
+
+data "alicloud_regions" "region_b" {
+  current  = true
+  provider = alicloud.region_b
+}
 module "cen" {
   source = "../.."
 
@@ -111,9 +120,9 @@ module "cen_instance_attachment" {
   using_existing_cen_id      = true
   existing_cen_id            = module.cen.this_cen_id
   vpc_id_1                   = alicloud_vpc.vpc1.id
-  child_instance_region_id_1 = "cn-beijing"
+  child_instance_region_id_1 = data.alicloud_regions.region_a.regions[0].id
   vpc_id_2                   = alicloud_vpc.vpc2.id
-  child_instance_region_id_2 = "cn-hangzhou"
+  child_instance_region_id_2 = data.alicloud_regions.region_b.regions[0].id
 
   #bandwidth limit
   create_bandwidth_limit = false

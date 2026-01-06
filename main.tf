@@ -1,5 +1,5 @@
 locals {
-  cen_id = var.using_existing_cen_id || var.existing_cen_id != "" ? var.existing_cen_id : concat(alicloud_cen_instance.this.*.id, [""])[0]
+  cen_id = var.using_existing_cen_id || var.existing_cen_id != "" ? var.existing_cen_id : concat(alicloud_cen_instance.this[*].id, [""])[0]
 }
 
 resource "alicloud_cen_instance" "this" {
@@ -22,7 +22,7 @@ resource "alicloud_cen_bandwidth_package" "this" {
 resource "alicloud_cen_bandwidth_package_attachment" "this" {
   count                = var.create_bandwidth_package_attachment ? 1 : 0
   instance_id          = local.cen_id
-  bandwidth_package_id = var.bandwidth_package_id != "" ? var.bandwidth_package_id : concat(alicloud_cen_bandwidth_package.this.*.id, [""])[0]
+  bandwidth_package_id = var.bandwidth_package_id != "" ? var.bandwidth_package_id : concat(alicloud_cen_bandwidth_package.this[*].id, [""])[0]
 }
 
 resource "alicloud_cen_instance_attachment" "vpc_attach_1" {
